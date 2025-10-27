@@ -51,10 +51,10 @@
         <div class="flex-grow-1" style="margin-left: 250px;">
             <!-- Topbar -->
             <nav class="navbar navbar-light bg-white shadow-sm px-4 py-3 d-flex justify-content-between align-items-center">
-                <form class="d-flex align-items-center w-50">
+                {{-- <form class="d-flex align-items-center w-50">
                     <input class="form-control rounded-pill me-2" type="search" placeholder="Search..." aria-label="Search">
                     <button class="btn btn-outline-secondary rounded-pill" type="submit"><i class="fas fa-search"></i></button>
-                </form>
+                </form> --}}
 
                 <div class="d-flex align-items-center">
                     <i class="fas fa-bell me-3 text-secondary"></i>
