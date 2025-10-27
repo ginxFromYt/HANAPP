@@ -2,7 +2,7 @@
 
 @section('title', 'Admin Dashboard')
 
-@section('content')
+@section(section: 'content')
 <div class="container py-5 position-relative">
 
     {{-- ==== Admin Welcome Banner ==== --}}

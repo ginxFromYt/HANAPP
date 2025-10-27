@@ -5,10 +5,10 @@
 @section('content')
 <style>
     :root {
-        --hanapp-light-blue: #9fd3f3ff; 
-        --hanapp-primary-blue: #2e94f4ff; 
-        --hanapp-bright-blue: rgba(181, 210, 243, 1); 
-        --hanapp-dark-blue: #0b68e0; 
+        --hanapp-light-blue: #9fd3f3ff;
+        --hanapp-primary-blue: #2e94f4ff;
+        --hanapp-bright-blue: rgba(181, 210, 243, 1);
+        --hanapp-dark-blue: #0b68e0;
     }
 
     body {
@@ -94,7 +94,7 @@
         </a>
 
         <div class="d-flex align-items-center">
-            <a href="/admin/login" class="btn btn-sm btn-outline-dark me-2 btn-admin-login">Admin Login</a>
+            <a href="{{ route('home') }}" class="btn btn-sm btn-outline-dark me-2">Back to Home</a>
 
         </div>
     </div>

@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\FoodSpotController;
-use App\Http\Controllers\AdminAuthController;
-use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ReviewController;
 
@@ -34,9 +33,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/register', [AdminAuthController::class, 'register'])->name('register');
 
     // Protected Admin Routes
-    Route::middleware(['auth:admin', 'no.cache'])->group(function () {
+    Route::middleware(['auth:admin'])->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-        Route::resource('foodspots', FoodSpotController::class);
+        Route::get('foodspots', [FoodSpotController::class, 'adminIndex'])->name('foodspots.index');
+        Route::resource('foodspots', FoodSpotController::class)->except(['index']);
         Route::post('/reviews/{id}/reply', [AdminController::class, 'reply'])->name('reviews.reply');
     });
 });

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.Admin.app')
 
 @section('title', 'Manage Food Spots')
 
@@ -17,7 +17,7 @@
                     <label for="name" class="form-label">Food Spot Name</label>
                     <input type="text" name="name" class="form-control" required>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="address" class="form-label">Address</label>
                     <input type="text" name="address" class="form-control" required>
@@ -69,9 +69,9 @@
                     <td>{{ \Carbon\Carbon::parse($spot->close_time)->format('h:i A') }}</td>
                     <td>
 
-                        
+
                         @if($spot->images != NULL)
-                        
+
                         <!-- dito ung number 5.  -->
                         <img src="{{ asset($spot->images) }}" alt="{{ $spot->name }}" width="100">
                         @else
@@ -80,7 +80,7 @@
                     </td>
                     <td>
                         <a href="{{ route('admin.foodspots.edit', $spot->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        
+
                         <form action="{{ route('admin.foodspots.destroy', $spot->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Delete this food spot?');">
                             @csrf
                             @method('DELETE')

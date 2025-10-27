@@ -14,6 +14,8 @@
 
     body {
         background-color: #ffffff !important;
+        margin: 0;
+        padding: 0;
     }
 
     /* Header/Navbar Styling */
@@ -35,6 +37,22 @@
     }
     .btn-admin-login:hover {
         background-color: var(--hanapp-primary-blue);
+        color: white;
+    }
+    .btn-outline-primary {
+        color: var(--hanapp-primary-blue);
+        border-color: var(--hanapp-primary-blue);
+    }
+    .btn-outline-primary:hover {
+        background-color: var(--hanapp-primary-blue);
+        color: white;
+    }
+    .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+    }
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
         color: white;
     }
     .btn-register {
@@ -243,17 +261,33 @@
 
 @section('content')
 
-<nav class="navbar navbar-light hanapp-navbar shadow-sm">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
+<nav class="navbar navbar-expand-lg navbar-light hanapp-navbar shadow-sm">
+    <div class="container-fluid">
         <a class="navbar-brand fw-bold hanapp-logo" href="{{ route('home') }}">
             <span class="me-2">HANAPP</span>
         </a>
 
-        <div class="d-flex align-items-center">
-            <a href="/admin/login" class="btn btn-sm btn-outline-dark me-2 btn-admin-login">Admin Login</a>
-            <button class="btn btn-sm btn-outline-success btn-hamburger" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu" aria-controls="sideMenu">
-                ☰
-            </button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="d-flex justify-content-end align-items-center w-100">
+                @auth('admin')
+                    <div class="d-inline-flex align-items-center">
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-outline-primary me-2">Dashboard</a>
+                        <a href="{{ route('admin.logout') }}" class="btn btn-sm btn-outline-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                @else
+                    <a href="{{ route('admin.login') }}" class="btn btn-sm btn-outline-dark me-2 btn-admin-login">Admin Login</a>
+                @endauth
+                <button class="btn btn-sm btn-outline-success ms-2 btn-hamburger" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu" aria-controls="sideMenu">
+                    ☰
+                </button>
+            </div>
         </div>
     </div>
 </nav>
@@ -286,7 +320,7 @@
 
 <div class="container py-4">
     <div class="row">
-      
+
         @forelse ($spots as $spot)
             <div class="col-md-4 mb-4">
                 <div class="card h-100 position-relative foodspot-card">

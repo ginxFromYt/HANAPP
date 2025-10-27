@@ -1,6 +1,8 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.Admin.app')
 
-<div class="container my-5">
+@section('title', 'Edit Food Spot')
+
+@section('content')
     <h2 class="text-primary">Edit Food Spot</h2>
 
     @if ($errors->any())
@@ -96,3 +98,5 @@
         <a href="{{ route('admin.foodspots.index') }}" class="btn btn-warning ms-2 text-dark">Cancel</a>
     </form>
 </div>
+
+@endsection

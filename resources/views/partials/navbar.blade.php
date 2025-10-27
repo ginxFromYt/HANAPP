@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" href="/">HANAPP</a>
+        <a class="navbar-brand" href="{{ route('home') }}">HANAPP</a>
 
         <div class="collapse navbar-collapse justify-content-end">
             @auth('admin')

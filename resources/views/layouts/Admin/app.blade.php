@@ -17,7 +17,7 @@
 
         <!-- bootstrap v5.3.2 -->
         <link rel="stylesheet" href="{{asset('build/bootstrap/bootstrap.v5.3.2.min.css')}}">
-        
+
 
     </head>
    <body class="font-sans antialiased bg-light">
@@ -36,20 +36,13 @@
                         <i class="fas fa-utensils me-2"></i> Food Spots
                     </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a href="{{ route('admin.reviews.index') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="fas fa-comments me-2"></i> Reviews
-                    </a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a href="{{ route('admin.analytics') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="fas fa-chart-bar me-2"></i> Analytics
-                    </a>
-                </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.settings') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="fas fa-cog me-2"></i> Settings
-                    </a>
+                    <form action="{{ route('admin.logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button class="nav-link text-white d-flex align-items-center bg-transparent border-0 w-100 text-start">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </button>
+                    </form>
                 </li>
             </ul>
         </nav>

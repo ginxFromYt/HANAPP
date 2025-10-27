@@ -1,53 +1,87 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Admin;
 use App\Http\Controllers\Controller;
-
-
 
 class AdminAuthController extends Controller
 {
-    public function showLogin()
+    public function __construct()
     {
+        // Protect all admin routes except login/register
+        $this->middleware('auth:admin')
+            ->except(['showLoginForm', 'login', 'showRegisterForm', 'register']);
+    }
+
+    // Show admin login form
+    public function showLoginForm()
+    {
+        // View file: resources/views/admin/auth/login.blade.php
         return view('admin.auth.login');
     }
 
-    public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+  public function login(Request $request)
+{
 
-        if (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->route('admin.dashboard');
-        }
+    //dd($request->all());
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-        return back()->withErrors(['email' => 'Invalid credentials']);
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::guard('admin')->attempt($credentials, $request->filled('remember'))) {
+        // If login successful, redirect to dashboard
+        return redirect()->route('admin.dashboard')->with('success', 'Welcome back!');
     }
 
-    public function showRegister()
+    return back()->withErrors([
+        'email' => 'Invalid credentials provided.',
+    ])->withInput($request->only('email'));
+}
+
+
+    // Logout admin
+  public function logout(Request $request)
+{
+    Auth::guard('admin')->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect()->route('home'); // Redirect to home page
+}
+
+
+    // Show registration form
+    public function showRegisterForm()
     {
+        // View file: resources/views/admin/auth/register.blade.php
         return view('admin.auth.register');
     }
 
+    // Handle registration request
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:admins',
-            'password' => 'required|min:6|confirmed',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:admins',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        Admin::create([
+        $admin = Admin::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
         ]);
 
-        return redirect()->route('admin.login')->with('success', 'Admin registered successfully.');
-    }
+        Auth::guard('admin')->login($admin);
 
-    public function logout()
-    {
-        Auth::guard('admin')->logout();
-        return redirect()->route('admin.login');
+
+
+        // Redirect to route name "admin.dashboard"
+        return redirect()->route('admin.dashboard')->with('success', 'Welcome to the admin dashboard!');
     }
 }
