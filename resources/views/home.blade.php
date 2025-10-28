@@ -325,42 +325,14 @@
             <div class="col-md-4 mb-4">
                 <div class="card h-100 position-relative foodspot-card">
 
-                    <!-- Green Banner Title -->
-                    <div class="card-header">
-                        {{
-                            match($spot->id) {
-                                1 => 'Fresh from the Farm!',
-                                2 => 'Discover Hidden Delights!',
-                                3 => 'Where Reggae Meets Flavor!',
-                                4 => 'Taste with Elegance!',
-                                5 => 'Dine Under the Stars!',
-                                6 => 'Sip & Bite Happiness!',
-                                7 => 'Comfort Food Awaits!',
-                                8 => 'Luxury Dining Experience!',
-                                9 => 'Bowls of Tradition!',
-                                default => 'Delicious Moments Await!',
-                            }
-                        }}
+                    <!-- Dynamic Banner Title -->
+                    <div class="card-header" style="background-color: {{ $spot->theme_color }};">
+                        {{ $spot->banner_title }}
                     </div>
 
-                    <!-- Spot Images -->
-                    @php
-                        $spotImages = match($spot->id) {
-                            1 => ['jaquesfarm.png', 'jaquesfarm1.png', 'jaquesfarm2.png'],
-                            2 => ['hiddenplace.png', 'hiddenplace1.png', 'hiddenplace2.png'],
-                            3 => ['reggaeranch.png', 'reggaeranch1.png', 'reggaeranch2.png'],
-                            4 => ['troy.png', 'troy1.png', 'troy2.png'],
-                            5 => ['veranda.png', 'veranda1.png', 'veranda2.png'],
-                            6 => ['diosa.png', 'diosa1.png', 'diosa2.png'],
-                            7 => ['seguro.png', 'seguro1.png', 'seguro2.png'],
-                            8 => ['solomon.png', 'solomon1.png', 'solomon2.png'],
-                            9 => ['twinsbowl.png', 'twinsbowl1.png', 'twinsbowl2.png'],
-                            default => ['default-image.png'],
-                        };
-                    @endphp
-
+                    <!-- Dynamic Image Gallery -->
                     <div class="image-slider" style="position: relative; overflow: hidden;">
-                        @foreach ($spotImages as $index => $img)
+                        @foreach ($spot->image_gallery as $index => $img)
                             <img
                                 src="{{ asset('images/' . $img) }}"
                                 alt="{{ $spot->name }} Image {{ $index + 1 }}"
@@ -371,6 +343,7 @@
                             >
                         @endforeach
 
+                        @if(is_array($spot->image_gallery) && count($spot->image_gallery) > 1)
                         <button type="button" class="slider-btn prev-btn" data-spot-id="{{ $spot->id }}"
                                 style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); background: rgba(0,0,0,0.5); border: none; color: white; padding: 5px 10px; cursor: pointer; border-radius: 3px;">
                             &lt;
@@ -379,12 +352,16 @@
                                 style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background:rgba(0,0,0,0.5); border: none; color: white; padding: 5px 10px; cursor: pointer; border-radius: 3px;">
                             &gt;
                         </button>
+                        @endif
                     </div>
 
                     <!-- Spot Info -->
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $spot->name }}</h5>
                         <p class="card-text">{{ $spot->address }}</p>
+                        @if($spot->tagline)
+                            <p class="card-text text-muted small">{{ $spot->tagline }}</p>
+                        @endif
 
                         <a href="{{ route('foodspots.show', $spot->id) }}" class="mt-auto btn btn-view-more">View More</a>
                     </div>

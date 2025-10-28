@@ -47,22 +47,28 @@
 
     {{-- === Total Visits (White) === --}}
     <div class="col-md-4 col-lg-3 d-flex justify-content-center">
-        <div class="card metric-card metric-white shadow-sm rounded-4 w-100" style="max-width: 300px;">
-            <div class="card-body">
-                <h5 class="card-title text-primary"><i class="fas fa-eye me-2 text-primary"></i>Total Visits</h5>
-                <p class="card-text display-6 fw-bold text-primary">{{ $totalVisits ?? 'N/A' }}</p>
+        <a href="{{ route('admin.analytics.visits') }}" class="text-decoration-none w-100" style="max-width: 300px;">
+            <div class="card metric-card metric-white shadow-sm rounded-4 h-100 clickable-card">
+                <div class="card-body">
+                    <h5 class="card-title text-primary"><i class="fas fa-eye me-2 text-primary"></i>Total Visits</h5>
+                    <p class="card-text display-6 fw-bold text-primary">{{ $totalVisits ?? 'N/A' }}</p>
+                    <small class="text-muted">Click for detailed analytics</small>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
 
     {{-- === Average Rating (Blue) === --}}
     <div class="col-md-4 col-lg-3 d-flex justify-content-center">
-        <div class="card metric-card metric-blue shadow-sm rounded-4 w-100" style="max-width: 300px;">
-            <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-star me-2"></i>Average Rating</h5>
-                <p class="card-text display-6 fw-bold">{{ number_format($averageRating, 1) ?? 'N/A' }}</p>
+        <a href="{{ route('admin.analytics.ratings') }}" class="text-decoration-none w-100" style="max-width: 300px;">
+            <div class="card metric-card metric-blue shadow-sm rounded-4 h-100 clickable-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-star me-2"></i>Average Rating</h5>
+                    <p class="card-text display-6 fw-bold">{{ number_format($averageRating, 1) ?? 'N/A' }}</p>
+                    <small class="text-white opacity-75">Click for detailed analytics</small>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
 
 </div>
@@ -184,6 +190,16 @@
     .metric-card:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .clickable-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .clickable-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
 
     .metric-blue { background-color: var(--main-blue); color: white; }

@@ -46,6 +46,30 @@
             <textarea class="form-control border-primary" id="description" name="description" rows="4">{{ old('description') }}</textarea>
         </div>
 
+        <h5 class="mt-4 mb-3 text-primary">🎨 Display & Branding</h5>
+
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <label for="banner_title" class="form-label text-primary">Banner Title</label>
+                <input type="text" class="form-control border-primary" id="banner_title" name="banner_title" value="{{ old('banner_title') }}" placeholder="e.g., Fresh from the Farm!">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="theme_color" class="form-label text-primary">Theme Color</label>
+                <input type="color" class="form-control form-control-color border-primary" id="theme_color" name="theme_color" value="{{ old('theme_color', '#2e94f4') }}">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="tagline" class="form-label text-primary">Tagline</label>
+            <input type="text" class="form-control border-primary" id="tagline" name="tagline" value="{{ old('tagline') }}" placeholder="A short descriptive tagline">
+        </div>
+
+        <div class="mb-3">
+            <label for="image_gallery" class="form-label text-primary">Image Gallery</label>
+            <input class="form-control border-primary" type="file" id="image_gallery" name="image_gallery[]" multiple accept="image/*">
+            <div class="form-text text-muted">Upload multiple images for the gallery. First image will be the main image.</div>
+        </div>
+
         <h5 class="mt-4 mb-3 text-primary">📍 Location and Contact Details</h5>
 
         <div class="row">
@@ -80,8 +104,9 @@
         </div>
 
         <div class="mb-3">
-            <label for="image" class="form-label text-primary">Upload Image</label>
+            <label for="image" class="form-label text-primary">Legacy Single Image (Optional)</label>
             <input class="form-control border-primary" type="file" id="image" name="image">
+            <div class="form-text text-muted">This will be used as fallback if no gallery images are uploaded.</div>
         </div>
 
         <button type="submit" class="btn btn-primary">Create Food Spot</button>

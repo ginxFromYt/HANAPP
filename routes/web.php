@@ -3,6 +3,7 @@
 use App\Http\Controllers\FoodSpotController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ReviewController;
 
@@ -38,6 +39,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('foodspots', [FoodSpotController::class, 'adminIndex'])->name('foodspots.index');
         Route::resource('foodspots', FoodSpotController::class)->except(['index']);
         Route::post('/reviews/{id}/reply', [AdminController::class, 'reply'])->name('reviews.reply');
+        
+        // Analytics Routes
+        Route::get('/analytics/visits', [AnalyticsController::class, 'visitsAnalytics'])->name('analytics.visits');
+        Route::get('/analytics/ratings', [AnalyticsController::class, 'ratingsAnalytics'])->name('analytics.ratings');
     });
 });
 

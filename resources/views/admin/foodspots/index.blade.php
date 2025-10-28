@@ -54,9 +54,11 @@
                 <tr>
                     <th>Name</th>
                     <th>Address</th>
+                    <th>Banner Title</th>
+                    <th>Theme</th>
                     <th>Open</th>
                     <th>Close</th>
-                    <th>Image</th>
+                    <th>Gallery</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -65,17 +67,39 @@
                 <tr>
                     <td>{{ $spot->name }}</td>
                     <td>{{ $spot->address }}</td>
+                    <td>{{ $spot->banner_title ?: 'Default' }}</td>
+                    <td>
+                        <span class="badge" style="background-color: {{ $spot->theme_color }}; color: white;">
+                            {{ $spot->theme_color }}
+                        </span>
+                    </td>
                     <td>{{ $spot->open_time}}</td>
                     <td>{{ \Carbon\Carbon::parse($spot->close_time)->format('h:i A') }}</td>
                     <td>
-
-
-                        @if($spot->images != NULL)
-
-                        <!-- dito ung number 5.  -->
-                        <img src="{{ asset($spot->images) }}" alt="{{ $spot->name }}" width="100">
+                        @php
+                            $imageGallery = $spot->image_gallery;
+                            if (is_string($imageGallery)) {
+                                $imageGallery = json_decode($imageGallery, true) ?: [];
+                            }
+                            if (!is_array($imageGallery)) {
+                                $imageGallery = [];
+                            }
+                        @endphp
+                        @if(!empty($imageGallery))
+                            <div class="d-flex gap-1">
+                                @foreach(array_slice($imageGallery, 0, 3) as $img)
+                                    <img src="{{ asset('images/' . $img) }}" alt="{{ $spot->name }}"
+                                         style="width: 30px; height: 30px; object-fit: cover; border-radius: 3px;">
+                                @endforeach
+                                @if(count($imageGallery) > 3)
+                                    <span class="badge bg-secondary">+{{ count($imageGallery) - 3 }}</span>
+                                @endif
+                            </div>
+                        @elseif($spot->images)
+                            <img src="{{ asset($spot->images) }}" alt="{{ $spot->name }}"
+                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 3px;">
                         @else
-                        No image
+                            <span class="text-muted">No image</span>
                         @endif
                     </td>
                     <td>

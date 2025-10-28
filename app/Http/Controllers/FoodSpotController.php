@@ -65,6 +65,12 @@ class FoodSpotController extends Controller
             'longitude' => 'nullable|numeric',
             'trivia_question' => 'nullable|string|max:500',
             'trivia_answer' => 'nullable|string|max:255',
+
+            // --- DYNAMIC CONTENT FIELDS ---
+            'banner_title' => 'nullable|string|max:255',
+            'theme_color' => 'nullable|string|max:7',
+            'tagline' => 'nullable|string|max:255',
+            'image_gallery.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:5120',
             // -----------------------------
 
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:5120',
@@ -75,16 +81,36 @@ class FoodSpotController extends Controller
             // --- RETRIEVE ALL NEW FIELDS ---
             'phone_number', 'email', 'category_tag', 'latitude', 'longitude',
             'trivia_question', 'trivia_answer',
+            'banner_title', 'theme_color', 'tagline',
             // -------------------------------
         ]);
 
+        // Handle image gallery upload
+        $imageGallery = [];
+        if ($request->hasFile('image_gallery')) {
+            foreach ($request->file('image_gallery') as $file) {
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('images'), $filename);
+                $imageGallery[] = $filename; // Store just the filename
+            }
+        }
+
+        // Handle single image upload (fallback)
         if ($request->hasFile('image')) {
             $filename = time() . '_' . $request->image->getClientOriginalName();
             $request->image->move(public_path('images'), $filename);
-            $data['images'] = 'images/' . $filename;
+            $data['images'] = 'images/' . $filename; // Store with path for legacy compatibility
+
+            // If no gallery images, use single image filename only
+            if (empty($imageGallery)) {
+                $imageGallery[] = $filename; // Just filename, not full path
+            }
         } else {
             $data['images'] = null;
         }
+
+        // Set image gallery (store as JSON, model will cast to array)
+        $data['image_gallery'] = !empty($imageGallery) ? $imageGallery : null;
 
         FoodSpot::create($data);
 
@@ -112,18 +138,35 @@ class FoodSpotController extends Controller
         'category_tag' => 'nullable|string|max:50',
         'latitude' => 'nullable|numeric',
         'longitude' => 'nullable|numeric',
+        'banner_title' => 'nullable|string|max:255',
+        'theme_color' => 'nullable|string|max:7',
+        'tagline' => 'nullable|string|max:255',
+        'image_gallery.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:5120',
         'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:5120',
     ]);
 
     $data = $request->only([
         'name', 'address', 'description', 'open_time', 'close_time',
         'phone_number', 'email', 'category_tag', 'latitude', 'longitude',
+        'banner_title', 'theme_color', 'tagline',
     ]);
 
+    // Handle image gallery upload
+    if ($request->hasFile('image_gallery')) {
+        $imageGallery = [];
+        foreach ($request->file('image_gallery') as $file) {
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+            $imageGallery[] = $filename; // Store just the filename
+        }
+        $data['image_gallery'] = $imageGallery; // Let Laravel's cast handle it
+    }
+
+    // Handle single image upload (fallback)
     if ($request->hasFile('image')) {
         $filename = time() . '.' . $request->image->extension();
         $request->image->move(public_path('images'), $filename);
-        $data['image'] = 'images/' . $filename;
+        $data['images'] = 'images/' . $filename; // Store with path for legacy compatibility
     }
 
     $foodspot->update($data);
@@ -181,7 +224,7 @@ class FoodSpotController extends Controller
 
         $foodspot->reviews()->create([
             'reviewer_name' => auth()->user()->name ?? 'Guest',
-            'comment' => $request->content,
+            'comment' => $request->input('content'),
             'rating' => 5 // default for now
         ]);
 
